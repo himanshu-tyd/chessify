@@ -25,7 +25,6 @@ const Game = () => {
 
       switch (message.type) {
         case INIT_GAME:
-          setChess(new Chess());
           setBoard(chess.board());
 
           console.log("inside init game");
@@ -57,7 +56,7 @@ const Game = () => {
     );
   };
 
-  if (!socket) return <div>Connecting...</div>;
+  if (!socket) return <div className="flex h-screen text-center items-center justify-center text-white text-[38px] font-bold ">Connecting...</div>;
 
   return (
     <section className="w-full px-5 py-5 md:px-20 md:py-10 ">
