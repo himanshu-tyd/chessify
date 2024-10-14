@@ -31,10 +31,11 @@ class GameManager {
                 }
             }
             if (message.type === messages_1.MOVE) {
-                console.log('inside move');
+                console.log("inside move");
                 const game = this.games.find((g) => g.player1 == socket || g.player2 == socket);
                 if (game) {
-                    game.makeMove(socket, message.move);
+                    console.log("inside game");
+                    game.makeMove(socket, message.payload.move);
                 }
             }
         });

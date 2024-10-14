@@ -5,6 +5,7 @@ const chess_js_1 = require("chess.js");
 const messages_1 = require("./messages");
 class Game {
     constructor(player1, player2) {
+        this.moveCount = 0;
         this.player1 = player1;
         this.player2 = player2;
         this.board = new chess_js_1.Chess();
@@ -16,25 +17,29 @@ class Game {
                 color: "white",
             },
         }));
+        console.log('player1', this.player1);
         this.player2.send(JSON.stringify({
             type: messages_1.INIT_GAME,
             payload: {
                 color: "black",
             },
         }));
+        console.log('player2', this.player2);
     }
     makeMove(socket, move) {
-        //validate the type of move using zod
-        if (this.board.moves().length % 2 === 0 && socket !== this.player1) {
+        console.log('move', move);
+        //Validate the type of move using zod
+        if (this.moveCount % 2 === 0 && socket !== this.player1) {
             console.log('player 1 return');
             return;
         }
-        if (this.board.moves().length % 2 === 1 && socket !== this.player2) {
+        if (this.moveCount % 2 === 1 && socket !== this.player2) {
             console.log('player 2 return');
             return;
         }
         try {
             this.board.move(move);
+            this.moveCount++;
         }
         catch (e) {
             console.log(e);
@@ -61,8 +66,8 @@ class Game {
             }));
             return;
         }
-        console.log('move conditon ', this.board.moves().length % 2 === 0);
-        if (this.board.moves().length % 2 === 0) {
+        //send update to the both playes
+        if (this.moveCount % 2 === 0) {
             console.log("player 1");
             this.player2.send(JSON.stringify({
                 type: messages_1.MOVE,
@@ -74,6 +79,7 @@ class Game {
             type: messages_1.MOVE,
             payload: move,
         }));
+        this.moveCount++;
     }
 }
 exports.Game = Game;

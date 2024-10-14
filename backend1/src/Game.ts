@@ -1,13 +1,14 @@
-import { Data, WebSocket } from "ws";
+import {  WebSocket } from "ws";
 import { Chess } from "chess.js";
 import { GAME_OVER, INIT_GAME, MOVE } from "./messages";
 
 export class Game {
-  public player1: WebSocket;
+  public player1: WebSocket; 
   public player2: WebSocket;
   private board: Chess;
   private moves: string[];
   private startTime: Date;
+  private moveCount=0;
 
   constructor(player1: WebSocket, player2: WebSocket) {
     this.player1 = player1;
@@ -24,6 +25,8 @@ export class Game {
       })
     );
 
+    console.log('player1', this.player1)
+    
     this.player2.send(
       JSON.stringify({
         type: INIT_GAME,
@@ -32,6 +35,7 @@ export class Game {
         },
       })
     );
+    console.log('player2', this.player2)
   }
 
   makeMove(
@@ -41,20 +45,29 @@ export class Game {
       to: string;
     }
   ) {
-    //validate the type of move using zod
 
-    if (this.board.moves().length % 2 === 0 && socket !== this.player1) {
+    console.log('move', move)
+
+    //Validate the type of move using zod
+
+    if (this.moveCount % 2 === 0 && socket !== this.player1) {
       console.log('player 1 return')
       return;
     }
 
-    if (this.board.moves().length % 2 === 1 && socket !== this.player2) {
+
+
+    if (this.moveCount % 2 === 1 && socket !== this.player2) {
       console.log('player 2 return')
       return;
     }
 
+
     try {
+
       this.board.move(move);
+      this.moveCount++;
+      
     } catch (e) {
       console.log(e);
       return;
@@ -90,8 +103,8 @@ export class Game {
       return;
     }
 
-    console.log('move conditon ', this.board.moves().length % 2 === 0)
-    if (this.board.moves().length % 2 === 0) {
+    //send update to the both playes
+    if (this.moveCount % 2 === 0) {
       console.log("player 1");
       this.player2.send(
         JSON.stringify({
@@ -107,6 +120,8 @@ export class Game {
           payload: move,
         })
       );
+
+      this.moveCount++;
     }
     //send update to the both playes
   }

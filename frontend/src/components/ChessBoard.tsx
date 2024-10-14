@@ -3,6 +3,8 @@ import { Square, PieceSymbol, Color } from "chess.js";
 import { MOVE } from "../screens/Game";
 
 interface boardProps {
+  chess: any;
+  setBoard: any;
   board: ({
     square: Square;
     type: PieceSymbol;
@@ -11,7 +13,7 @@ interface boardProps {
   socket: WebSocket;
 }
 
-const ChessBoar = ({ board, socket }: boardProps) => {
+const ChessBoar = ({ chess, setBoard, board, socket }: boardProps) => {
   const [from, setFrom] = useState<null | Square>(null);
   const [to, setTo] = useState<null | Square>(null);
 
@@ -26,22 +28,34 @@ const ChessBoar = ({ board, socket }: boardProps) => {
     if (!from) {
       setFrom(sr);
     } else {
-      socket.send(
-        JSON.stringify({
-          type: MOVE,
-          payload: {
-            from,
-            to: sr,
-          },
-        })
-      );
+      try {
+        socket.send(
+          JSON.stringify({
+            type: MOVE,
+            payload: {
+              move:{
+                from,
+                to: sr,
 
-      setFrom(null)
+              }
+            },
+          })
+        );
+
+        setFrom(null);
+        chess.move({
+          from,
+          to: sr,
+        });
+        setBoard(chess.board());
+        console.log({
+          from,
+          to: sr,
+        });
+      } catch (e) {
+        console.log("invalid move", e);
+      }
     }
-    console.log({
-      from,
-      to: sr,
-    });
   };
 
   return (
@@ -50,10 +64,10 @@ const ChessBoar = ({ board, socket }: boardProps) => {
         return (
           <div key={i} className="flex ">
             {row.map((s, j) => {
-                const squareRepresentation = String.fromCharCode(65 + (j % 8)) + "" + (8 - i) as Square;
+              const squareRepresentation = (String.fromCharCode(65 + (j % 8)) +
+                "" +
+                (8 - i)) as Square;
 
-
-              // console.log(squareRepresentation); 
               return (
                 <div
                   onClick={() => handleClick(s, squareRepresentation)}

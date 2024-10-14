@@ -27,19 +27,19 @@ const Game = () => {
         case INIT_GAME:
           setBoard(chess.board());
 
-          console.log("inside init game");
+          console.log("INSIDE INIT GAME");
           break;
 
         case MOVE: {
           const move = message.payload;
           chess.move(move)
           setBoard(chess.board())
-          console.log("move happend");
+          console.log("MADE MOVE");
           break;
         }
 
         case GAME_OVER:
-          console.log("game over");
+          console.log("GAME OVER");
           break;
 
         default:
@@ -49,7 +49,7 @@ const Game = () => {
   }, [socket, chess]);
 
   const handlePlay = () => {
-    socket.send(
+    socket?.send(
       JSON.stringify({
         type: INIT_GAME,
       })
@@ -62,7 +62,7 @@ const Game = () => {
     <section className="w-full px-5 py-5 md:px-20 md:py-10 ">
       <div className="w-full grid grid-cols-1 gap-2 md:grid-cols-2 text-white ">
         <div className="cols-span-1 w-full flex items-center justify-center ">
-          <ChessBoard board={board} socket={socket} />
+          <ChessBoard chess={chess} setBoard={setBoard} board={board} socket={socket} />
         </div>
 
         <div className="flex items-center justify-center text-white cols-span-2 w-full ">

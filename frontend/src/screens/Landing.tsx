@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Button from "../components/Button";
 
 const Landing = () => {
+  
   const navigation = useNavigate();
 
   return (
@@ -17,15 +18,15 @@ const Landing = () => {
           />
         </div>
 
-        <div className="w-full flex items-center flex-col text-white">
+        <div className="w-full flex items-center flex-col text-white ">
           <h1 className="capitalize text-[38px] md:text-[42] lg:text-[48px] font-bold drop-shadow-lg">
             play chess online
           </h1>
-          <h1 className="capitalize  text-[38px] md:text-[42] lg:text-[48px] font-bold  drop-shadow-lg">
+          <h1 className="capitalize  text-[38px] md:text-[42] lg:text-[48px] font-bold  drop-shadow-lg mb-10">
             on #2 site
           </h1>
 
-          <Button onClick={() => navigation("/game")} title={'play online '} desc="play with your friends" >
+          <Button onClick={() => navigation("/game")} title={'play online '} desc="play with your friends"  >
             <img
               src="./strategy.png"
               alt="chess"
