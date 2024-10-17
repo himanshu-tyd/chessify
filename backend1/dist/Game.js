@@ -17,18 +17,17 @@ class Game {
                 color: "white",
             },
         }));
-        console.log('player1', this.player1);
         this.player2.send(JSON.stringify({
             type: messages_1.INIT_GAME,
             payload: {
                 color: "black",
             },
         }));
-        console.log('player2', this.player2);
     }
     makeMove(socket, move) {
         console.log('move', move);
         //Validate the type of move using zod
+        console.log(this.moveCount % 2 === 0);
         if (this.moveCount % 2 === 0 && socket !== this.player1) {
             console.log('player 1 return');
             return;
@@ -39,7 +38,6 @@ class Game {
         }
         try {
             this.board.move(move);
-            this.moveCount++;
         }
         catch (e) {
             console.log(e);

@@ -36,7 +36,6 @@ const ChessBoar = ({ chess, setBoard, board, socket }: boardProps) => {
               move:{
                 from,
                 to: sr,
-
               }
             },
           })

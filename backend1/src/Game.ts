@@ -24,8 +24,6 @@ export class Game {
         },
       })
     );
-
-    console.log('player1', this.player1)
     
     this.player2.send(
       JSON.stringify({
@@ -35,7 +33,6 @@ export class Game {
         },
       })
     );
-    console.log('player2', this.player2)
   }
 
   makeMove(
@@ -50,6 +47,7 @@ export class Game {
 
     //Validate the type of move using zod
 
+    console.log(this.moveCount %2=== 0)
     if (this.moveCount % 2 === 0 && socket !== this.player1) {
       console.log('player 1 return')
       return;
@@ -66,8 +64,6 @@ export class Game {
     try {
 
       this.board.move(move);
-      this.moveCount++;
-      
     } catch (e) {
       console.log(e);
       return;
